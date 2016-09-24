@@ -62,11 +62,11 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         ConnectivityManager cm =
                 (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        TextView noConnectionError = (TextView) findViewById(R.id.no_connection_text);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         setContentView(R.layout.activity_my_stocks);
+        TextView noConnectionError = (TextView) findViewById(R.id.no_connection_text);
         // The intent service is for executing immediate pulls from the Yahoo API
         // GCMTaskService can only schedule tasks, they cannot execute immediately
         mServiceIntent = new Intent(this, StockIntentService.class);
