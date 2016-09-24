@@ -15,4 +15,5 @@
   <string name="list_item_quote_stock_symbol">GOOG</string>
   <string name="message_stock_already_saved">This stock is already saved!</string>
   <string name="content_description_fab">Add new stock</string>
+  <string name="text_no_connection_available">Oops, there is no connection available!</string>
 </resources>
