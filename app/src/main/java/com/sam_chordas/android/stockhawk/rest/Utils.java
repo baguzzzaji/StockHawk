@@ -1,13 +1,20 @@
 package com.sam_chordas.android.stockhawk.rest;
 
 import android.content.ContentProviderOperation;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
-import java.util.ArrayList;
+import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by sam_chordas on 10/8/15.
@@ -18,18 +25,31 @@ public class Utils {
 
   public static boolean showPercent = true;
 
-  public static ArrayList quoteJsonToContentVals(String JSON){
+  public static ArrayList<ContentProviderOperation> quoteJsonToContentVals(Context context, String JSON){
+    Log.d(LOG_TAG, "inside quoteJsonToContentVals");
     ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
     JSONObject jsonObject = null;
     JSONArray resultsArray = null;
     try{
       jsonObject = new JSONObject(JSON);
-      if (jsonObject != null && jsonObject.length() != 0){
+      if (jsonObject.length() != 0){
         jsonObject = jsonObject.getJSONObject("query");
         int count = Integer.parseInt(jsonObject.getString("count"));
         if (count == 1){
           jsonObject = jsonObject.getJSONObject("results")
               .getJSONObject("quote");
+
+          // Prevent app from going further if there's no data available
+          if (jsonObject.getString("Bid").equals("null")) {
+            try {
+              Log.d(LOG_TAG, "quoteJsonToContentVals: NO DATA");
+              Intent intent = new Intent(MyStocksActivity.BROADCAST_NO_DATA);
+              LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+            return batchOperations;
+          }
           batchOperations.add(buildBatchOperation(jsonObject));
         } else{
           resultsArray = jsonObject.getJSONObject("results").getJSONArray("quote");

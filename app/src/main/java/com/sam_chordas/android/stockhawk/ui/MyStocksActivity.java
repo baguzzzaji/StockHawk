@@ -1,20 +1,24 @@
 package com.sam_chordas.android.stockhawk.ui;
 
 import android.app.LoaderManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +27,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.gcm.GcmNetworkManager;
+import com.google.android.gms.gcm.PeriodicTask;
+import com.google.android.gms.gcm.Task;
+import com.melnykov.fab.FloatingActionButton;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
@@ -31,13 +39,11 @@ import com.sam_chordas.android.stockhawk.rest.RecyclerViewItemClickListener;
 import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.service.StockIntentService;
 import com.sam_chordas.android.stockhawk.service.StockTaskService;
-import com.google.android.gms.gcm.GcmNetworkManager;
-import com.google.android.gms.gcm.PeriodicTask;
-import com.google.android.gms.gcm.Task;
-import com.melnykov.fab.FloatingActionButton;
 import com.sam_chordas.android.stockhawk.touch_helper.SimpleItemTouchHelperCallback;
 
 public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static String BROADCAST_NO_DATA = "com.sam_chordas.android.stockhawk.no_data";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -55,10 +61,21 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private Cursor mCursor;
     boolean isConnected;
 
+    private NoDataReceiver noDataReceiver;
+    private boolean receiverRegistered;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+
+        // Register Receiver
+        if (!receiverRegistered) {
+            noDataReceiver = new NoDataReceiver();
+            LocalBroadcastManager.getInstance(this).registerReceiver(noDataReceiver, new IntentFilter(BROADCAST_NO_DATA));
+            receiverRegistered = true;
+        }
+
         ConnectivityManager cm =
                 (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -132,7 +149,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 } else {
                     networkToast();
                 }
-
             }
         });
 
@@ -162,6 +178,15 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (receiverRegistered) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(noDataReceiver);
+            receiverRegistered = false;
+        }
+    }
 
     @Override
     public void onResume() {
@@ -230,4 +255,11 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         mCursorAdapter.swapCursor(null);
     }
 
+    class NoDataReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("NoDataReceiver", "onReceive: NODATA");
+            Toast.makeText(MyStocksActivity.this, "Stock data you requested didn't exist", Toast.LENGTH_LONG).show();
+        }
+    }
 }
