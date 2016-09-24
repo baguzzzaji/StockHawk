@@ -77,6 +77,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 noConnectionError.setVisibility(View.GONE);
                 startService(mServiceIntent);
             } else {
+                noConnectionError.setVisibility(View.VISIBLE);
                 networkToast();
             }
         }
