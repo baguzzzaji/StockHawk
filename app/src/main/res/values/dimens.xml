@@ -9,4 +9,6 @@
     <dimen name="list_item_quote_bid_price_paddingRight">10sp</dimen>
     <dimen name="list_item_quote_padding">3dp</dimen>
     <dimen name="list_item_quote_height">72dp</dimen>
+    <dimen name="widget_default_height">110dp</dimen>
+    <dimen name="widget_default_width">110dp</dimen>
 </resources>

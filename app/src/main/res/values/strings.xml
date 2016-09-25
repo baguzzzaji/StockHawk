@@ -18,4 +18,5 @@
     <string name="text_no_connection_available">Oops, there is no connection available!</string>
     <string name="title_activity_detail_stock">DetailStockActivity</string>
     <string name="detail_stock_title">Stock Price Overtime</string>
+    <string name="stock_price_widget_title">Stocks Price</string>
 </resources>
