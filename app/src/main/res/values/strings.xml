@@ -1,19 +1,21 @@
 <resources>
-  <string name="app_name" translatable="false">Stock Hawk</string>
+    <string name="app_name" translatable="false">Stock Hawk</string>
 
-  <string name="action_example">Example action</string>
+    <string name="action_example">Example action</string>
 
-  <string name="action_settings">Settings</string>
-  <string name="action_change_units">Change Units</string>
-  <string name="symbol_search">Symbol Search</string>
-  <string name="content_test">Search for a Stock Symbol</string>
-  <string name="input_hint">FB</string>
-  <string name="input_prefill"></string>
-  <string name="network_toast">Uh-oh! This app requires an internet connection</string>
-  <string name="list_item_quote_change">100%</string>
-  <string name="list_item_quote_bid_price">1000.00</string>
-  <string name="list_item_quote_stock_symbol">GOOG</string>
-  <string name="message_stock_already_saved">This stock is already saved!</string>
-  <string name="content_description_fab">Add new stock</string>
-  <string name="text_no_connection_available">Oops, there is no connection available!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_change_units">Change Units</string>
+    <string name="symbol_search">Symbol Search</string>
+    <string name="content_test">Search for a Stock Symbol</string>
+    <string name="input_hint">FB</string>
+    <string name="input_prefill"></string>
+    <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+    <string name="list_item_quote_change">100%</string>
+    <string name="list_item_quote_bid_price">1000.00</string>
+    <string name="list_item_quote_stock_symbol">GOOG</string>
+    <string name="message_stock_already_saved">This stock is already saved!</string>
+    <string name="content_description_fab">Add new stock</string>
+    <string name="text_no_connection_available">Oops, there is no connection available!</string>
+    <string name="title_activity_detail_stock">DetailStockActivity</string>
+    <string name="detail_stock_title">Stock Price Overtime</string>
 </resources>

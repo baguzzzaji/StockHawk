@@ -94,7 +94,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 noConnectionError.setVisibility(View.GONE);
                 startService(mServiceIntent);
             } else {
-                noConnectionError.setVisibility(View.VISIBLE);
+                //noConnectionError.setVisibility(View.VISIBLE);
                 networkToast();
             }
         }
@@ -107,8 +107,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 new RecyclerViewItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, int position) {
-                        //TODO:
-                        // do something on item click
+                        mCursor.moveToPosition(position);
+                        Intent intent = new Intent(MyStocksActivity.this, DetailStockActivity.class);
+                        intent.putExtra("symbol", mCursor.getString(mCursor.getColumnIndex("symbol")));
+                        startActivity(intent);
                     }
                 }));
         recyclerView.setAdapter(mCursorAdapter);
@@ -259,7 +261,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("NoDataReceiver", "onReceive: NODATA");
-            Toast.makeText(MyStocksActivity.this, "Stock data you requested didn't exist", Toast.LENGTH_LONG).show();
+            Toast.makeText(MyStocksActivity.this, "Quote data you requested didn't exist", Toast.LENGTH_LONG).show();
         }
     }
 }
